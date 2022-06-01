@@ -22,4 +22,6 @@ public class VerifTokenResponse {
     private Date expiraEn;
 
     private String mensaje;
+
+    private Boolean valido;
 }

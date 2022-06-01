@@ -98,6 +98,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
                     .tokenEncript(tokenEncript)
                     .rol(user.getRol().getNombre())
                     .mensaje("Token Valido")
+                    .valido(true)
                     .expiraEn(aux.getToDate()).build();
 
         return VerifTokenResponse.builder()
@@ -105,6 +106,7 @@ public class AutenticacionServiceImpl implements AutenticacionService {
                 .tokenEncript(tokenEncript)
                 .rol(user.getRol().getNombre())
                 .mensaje("Token Invalido")
+                .valido(false)
                 .expiraEn(aux.getToDate()).build();
     }
 

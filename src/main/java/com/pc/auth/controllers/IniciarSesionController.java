@@ -88,7 +88,7 @@ public class IniciarSesionController {
         if (response.getMensaje().equals("Token Valido"))
             return new ResponseEntity<>(response, HttpStatus.OK);
         else
-            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     @GetMapping("/user")

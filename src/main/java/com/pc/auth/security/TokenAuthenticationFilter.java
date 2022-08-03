@@ -31,10 +31,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
-    public static final String AUTH_HEADER = "X-AUTH-TOKEN";
     public static final String AUTH_PARAMETER = "xauthtoken";
     public static final String AUTH_PARAMETER1 = "token";
-
     public static final String AUTH_PARAMETER_AUTHORIZATION = "Authorization";
 
     private boolean esValido(String valor) {
@@ -46,33 +44,27 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                                     @NotNull FilterChain filterChain) throws ServletException, IOException {
 
         String parameter = request.getParameter(AUTH_PARAMETER);
-        if (!esValido(parameter)) {
+        if (!esValido(parameter))
             parameter = request.getParameter(AUTH_PARAMETER1);
-        }
-        String header = request.getHeader(AUTH_HEADER);
-        if (!esValido(header)) {
-            header = request.getHeader(AUTH_PARAMETER_AUTHORIZATION);
-            if (header != null && header.toLowerCase().startsWith("bearer ")) {
-                header = header.substring("Bearer ".length());
-            }
-        }
+
+        String header = request.getHeader(AUTH_PARAMETER_AUTHORIZATION);
+        if (esValido(header) && header.toLowerCase().startsWith("bearer "))
+            header = header.substring("Bearer ".length());
+
         if (!esValido(parameter) && !esValido(header)) {
             filterChain.doFilter(request, response);
             return;
         }
         String token;
-        if (esValido(parameter)) {
+        if (esValido(parameter))
             token = parameter;
-            log.trace("Token recibido por query param=" + token);
-        } else {
+        else
             token = header;
-            log.trace("Token recibido por header=" + token);
-        }
+
         String[] tokens;
         AuthToken authToken;
 
         try {
-            assert token != null;
             tokens = AuthToken.decode(token);
             if (tokens.length != 2) {
                 filterChain.doFilter(request, response);
